@@ -1,0 +1,1 @@
+docker run -it -v path/to/source:/root/source rg350_build /bin/bash
