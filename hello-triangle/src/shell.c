@@ -2,9 +2,6 @@
 
 #include <string.h>
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-
 struct ShellContext
 {
     SDL_Window *sdl_window;
@@ -20,9 +17,7 @@ ShellContext *shell_new()
 
     if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_JOYSTICK ) < 0 ) goto err;
 
-    context->window_width = SCREEN_WIDTH;
-    context->window_height = SCREEN_HEIGHT;
-    context->sdl_window = SDL_CreateWindow( "", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN | SDL_WINDOW_OPENGL );
+    context->sdl_window = SDL_CreateWindow( "", 0, 0, 0, 0, SDL_WINDOW_FULLSCREEN | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI );
 
     if( !context->sdl_window ) goto err;
 

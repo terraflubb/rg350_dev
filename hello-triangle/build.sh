@@ -2,15 +2,6 @@
 set -e
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-# Launch this script from inside of the rg350_build container
-if [[ "$1" != "INSIDE_CONTAINER" ]]; then
-    docker run -it -v $(pwd):/root/source rg350_build /root/source/build.sh INSIDE_CONTAINER
-    exit 0
-fi
-
-# Build the latest binary
-make
-
 # Name of the result opk file
 OPK_NAME='hello_triangle.opk'
 
@@ -19,6 +10,21 @@ FLIST="media"
 FLIST="${FLIST} program.gcw"
 FLIST="${FLIST} icon.png"
 FLIST="${FLIST} default.gcw0.desktop"
+
+# Launch this script from inside of the rg350_build container
+if [[ "$1" != "INSIDE_CONTAINER" ]]; then
+    docker run -it -v $(pwd):/root/source rg350_build /root/source/build.sh INSIDE_CONTAINER
+
+    # Install if run with --install arg
+    if [[ "$1" == "--install" ]]; then
+        scp "./$OPK_NAME" "root@10.1.1.2:/media/data/apps/$OPK_NAME"
+    fi
+
+    exit 0
+fi
+
+# Build the latest binary
+make
 
 # The manifest is called "default.gcw0.desktop", fill it in here.
 cat > default.gcw0.desktop <<EOF
